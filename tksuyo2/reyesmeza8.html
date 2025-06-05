@@ -103,68 +103,72 @@
         .personaje:hover .overview{
             transform: translateY(0);
         }
+       .logo {
+           width: 130px;
+           height: auto; 
+         object-fit: contain;
+         transform: scale(1.5);
+}
     </style>
 
 
 
-    <header>
-        <form id="form">
-        <img src="tablos.jpg" alt="logo" style="width: auto; height: 50px;">
-        <input type="text" id="search" class="search" placeholder="Busca tu pelicula"></form>
-    </header>
-    <main id="main"></main>
+<header>
+    <form id="form">
+   <img src="tablos.jpg" alt="logo" class="logo" style="width: 130px; height: 70px;">
+   <input type="text" id="search" class="search" placeholder="Busca tu pelicula">
+</form>
+ </header>
+ <main id="main"></main>
+   <script>
+      const API_URL = 'https://dragonball-api.com/api/characters';
+      
+      const main = document.getElementById('main');
+      const form = document.getElementById('form');
+      const search = document.getElementById('search');
 
-<script>
-    const API_URL = 'https://dragonball-api.com/api/chracters';
-   const main = document.getElemntById('main');
-   const form = document.getElementById('form');
-   const search = document.getElementById('search');
+      getCharacters(API_URL)
+      
+      async function getCharacters(url){
+       const res = await fetch(url);
+       const data = await res.json();
+       showCharacters(data.items || data);
+      }
+     function showCharacters(characters){
+       main.innerHTML = '';
 
+       characters.forEach((char) => {
+ 
 
+  const{id, name, image, ki, maxki, race ,gender, description} = char;
+  const charElement = document.createElement('div');
+ charElement.classList.add('personaje');
+  charElement.innerHTML =`
+  <img src = "${image}" alt="${image}">
+  <div class="personaje-info">
+   <h1>${id}</h1>
+  <h3>${name}</h3>
+  <br>
+  ${race}
+       </div>
+      <div class = "overview">
+       <h3>Descripcion</h3>
+       <p><strong>ki:</strong>${ki}</p>
+       <p><strong>Max ki:</strong>${maxki}</p>
+       ${description}
+       </div> `
+       main.appendChild(charElement);
+  
+       })}
+       form.addEventListener('submit', (e) =>{
+         e.preventDefault()
+         const searchTerm = search.value.toLowerCase();
+         if(searchTerm && searchTerm !== ''){
+           getCharacters(API_URL + `?name=${searchTerm}`)
+           search.value='';
+         }else{window.location.reload();}
+       })
 
-     getCharacters(API_URL)
-
-     async function getCharacters(url){
-        const res = await fetch(url);
-        const data = await res.json();
-        showCharacters(data.items || data);
-     }
-     function showCharacters(personajes){
-        main.innerHTML= '';
-
-        characters.forEach((char) => {
-            //esta linea va a poner todos los elementos al principio, para eso el forEach, es similar al "for", pero el for tiene su inicializacion, condicion y limitante
-            const{name,image, ki, maxKi, race, gender, description} = char;
-            //esta linea pone lo que nos va a interesar del API que vamos a obtener
-            const charElement = document.createElement('div');
-            charElement.classList.add('personaje');
-            charElement.innerHTML = `
-            <img src = "${image}" alt="${image}"> 
-            <div class="personaje-info">
-
-                <h1>${id}</h1>
-                <h3>${name}</h3>
-                <br>
-                ${race}
-                    </div>
-                    <div class = "overview">
-                        <h3>Descripcion</h3>
-                        <p><strong>KI:</strong> ${ki}</p>
-                        <p><strong>Max KI:</strong> ${maxKi}</p>
-                        ${description}
-                        </div>`
-                    main.appendChild(charElement);
-
-        }); }
-            form.addEventListener('submit', (e) =>{
-                e.preventDefault()
-                const searchTerm = search.value.toLowerCase();
-                if(searchTerm && searchTerm !== ''){
-                    getMovies(API_URL + `?name=${searchTerm}`)
-                    search.value = '';
-                }else{window.location.reload();}
-            })
-</script>
-
+   </script>
 </body>
 </html>
