@@ -140,7 +140,7 @@
        characters.forEach((char) => {
  
 
-  const{id, name, image, ki, maxki, race ,gender, description} = char;
+  const{id, name, image, ki, maxKi, race ,gender, description} = char;
   const charElement = document.createElement('div');
  charElement.classList.add('personaje');
   charElement.innerHTML =`
@@ -154,7 +154,7 @@
       <div class = "overview">
        <h3>Descripcion</h3>
        <p><strong>ki:</strong>${ki}</p>
-       <p><strong>Max ki:</strong>${maxki}</p>
+       <p><strong>Max ki:</strong>${maxKi}</p>
        ${description}
        </div> `
        main.appendChild(charElement);
